@@ -1,0 +1,23 @@
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy import URL
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from src.settings import Settings
+
+settings = Settings()
+
+url = URL.create(
+    drivername=settings.driver_name,
+    username=settings.user_name,
+    password=settings.password,
+    host=settings.host,
+    port=settings.port,
+    database=settings.database
+)
+
+engine = create_async_engine(url=url, echo=True)
+session_maker = async_sessionmaker(engine=engine, expire_on_commit=False)
+
+
+class BaseModel(AsyncAttrs, DeclarativeBase):
+    pass

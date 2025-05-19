@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncAttrs
-from sqlalchemy import URL
+from sqlalchemy import URL, MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from src.settings import Settings
@@ -20,4 +20,4 @@ session_maker = async_sessionmaker(engine=engine, expire_on_commit=False)
 
 
 class BaseModel(AsyncAttrs, DeclarativeBase):
-    pass
+    metadata = MetaData(schema='dev')

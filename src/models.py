@@ -1,2 +1,2 @@
 from src.database import BaseModel
-from src.articles.models import ArticleSchema
+from src.articles.models import ArticleSchema, UserSchema

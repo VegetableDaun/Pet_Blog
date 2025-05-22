@@ -16,7 +16,7 @@ url = URL.create(
 )
 
 engine = create_async_engine(url=url, echo=True)
-session_maker = async_sessionmaker(engine=engine, expire_on_commit=False)
+session_maker = async_sessionmaker(bind=engine, expire_on_commit=False, autoflush=False)
 
 
 class BaseModel(AsyncAttrs, DeclarativeBase):

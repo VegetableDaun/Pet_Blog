@@ -1,13 +1,27 @@
 from fastapi import APIRouter
-from typing import List, Dict
-from src.articles.schemas import ArticleSchema
+from typing import List, Dict, Union
+
+from src.articles.schemas import ArticleModel
+from src.dependencies import SessionDep
+from src.articles.utils import get_list_articles, add_article_db
 
 router = APIRouter()
 
+
 @router.get('/blog')
-def get_articles():
-    return {'A': 'A'}
+async def get_articles(Session: SessionDep) -> List[ArticleModel]:
+    articles = await get_list_articles(Session)
+
+    return articles
+
 
 @router.post('/blog')
-def add_article(article: ArticleSchema) -> ArticleSchema:
-    return article
+async def add_article(Session: SessionDep, article_data: ArticleModel) -> Dict[str, bool]:
+    try:
+        article = await add_article_db(Session, article_data)
+
+        return {
+            'success': True,
+        }
+    except Exception as e:
+        raise e

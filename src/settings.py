@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 import pathlib
 
-DOTENV = pathlib.Path(os.path.dirname(__file__)).parent / '.env'
+DOTENV = pathlib.Path(os.path.dirname(__file__)).parent / ".env"
 
 
 class Settings(BaseSettings):

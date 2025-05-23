@@ -35,7 +35,9 @@ sqlalchemy_url = URL.create(
     database=settings.database,
 )
 
-config.set_main_option("sqlalchemy.url", sqlalchemy_url.render_as_string(hide_password=False))
+config.set_main_option(
+    "sqlalchemy.url", sqlalchemy_url.render_as_string(hide_password=False)
+)
 
 
 # other values from the config, defined by the needs of env.py,
@@ -70,7 +72,9 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, include_schemas=True)
+    context.configure(
+        connection=connection, target_metadata=target_metadata, include_schemas=True
+    )
 
     with context.begin_transaction():
         context.run_migrations()

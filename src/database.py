@@ -12,7 +12,7 @@ url = URL.create(
     password=settings.password,
     host=settings.host,
     port=settings.port,
-    database=settings.database
+    database=settings.database,
 )
 
 engine = create_async_engine(url=url, echo=True)
@@ -20,4 +20,4 @@ session_maker = async_sessionmaker(bind=engine, expire_on_commit=False, autoflus
 
 
 class BaseModel(AsyncAttrs, DeclarativeBase):
-    metadata = MetaData(schema='dev')
+    metadata = MetaData(schema="dev")

@@ -13,7 +13,9 @@ async def get_list_articles(Session: AsyncSession, limit=10):
     return articles
 
 
-async def add_article_db(Session: AsyncSession, article_data: ArticleModel) -> ArticleSchema:
+async def add_article_db(
+    Session: AsyncSession, article_data: ArticleModel
+) -> ArticleSchema:
     article = ArticleSchema(
         title=article_data.title,
         author=article_data.author,

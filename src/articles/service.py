@@ -13,26 +13,26 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get('/blog', response_class=HTMLResponse)
+@router.get("/blog", response_class=HTMLResponse)
 async def get_articles(request: Request, Session: SessionDep):
     articles = await get_list_articles(Session)
 
     # return articles
 
     return templates.TemplateResponse(
-        request=request,
-        name='blog.html',
-        context={'articles': articles}
+        request=request, name="blog.html", context={"articles": articles}
     )
 
 
-@router.post('/blog')
-async def add_article(Session: SessionDep, article_data: ArticleModel) -> Dict[str, bool]:
+@router.post("/blog")
+async def add_article(
+    Session: SessionDep, article_data: ArticleModel
+) -> Dict[str, bool]:
     try:
         article = await add_article_db(Session, article_data)
 
         return {
-            'success': True,
+            "success": True,
         }
     except Exception as e:
         raise e

@@ -1,8 +1,8 @@
-"""Added new UserSchema model
+"""Added UserSchema
 
-Revision ID: 8bce9878e95c
-Revises: 69b003b23a95
-Create Date: 2025-05-19 17:35:48.703861
+Revision ID: 89ab6c87e681
+Revises: 022cd9f64d8e
+Create Date: 2025-06-02 16:32:03.956907
 
 """
 
@@ -13,8 +13,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "8bce9878e95c"
-down_revision: Union[str, None] = "69b003b23a95"
+revision: str = "89ab6c87e681"
+down_revision: Union[str, None] = "022cd9f64d8e"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

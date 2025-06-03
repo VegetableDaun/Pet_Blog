@@ -12,3 +12,11 @@ dependencies = [
     "pydantic-settings>=2.9.1",
     "sqlalchemy>=2.0.40",
 ]
+
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+python_executable = ".venv/Scripts/python.exe"
+explicit_package_bases = true

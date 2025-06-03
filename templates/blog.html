@@ -30,13 +30,19 @@
             margin: 0 0 10px;
             font-size: 1.5em;
         }
-        .article .author {
+        .meta {
             color: #888;
             font-size: 0.9em;
             margin-bottom: 10px;
         }
         .article .content {
             white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+        .release-date {
+            text-align: right;
+            font-size: 0.85em;
+            color: #aaa;
         }
     </style>
 </head>
@@ -45,8 +51,9 @@
     {% for article in articles %}
     <div class="article">
         <h2>{{ article.title }}</h2>
-        <div class="author">by {{ article.author }}</div>
+        <div class="meta">by {{ article.author }}</div>
         <div class="content">{{ article.content }}</div>
+        <div class="release-date">{{ article.release_date.strftime("%Y-%m-%d") }}</div>
     </div>
     {% endfor %}
 </body>

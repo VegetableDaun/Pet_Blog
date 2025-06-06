@@ -1,7 +1,7 @@
 from src.articles.schemas import ArticleSchema
 from src.articles.models import ArticleCreate, ArticleUpdate
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import Select
+from sqlalchemy import Select, func
 from fastapi import Depends, HTTPException
 
 async def get_list_articles(Session: AsyncSession, limit=5, page_id=1):
@@ -56,3 +56,10 @@ async def update_article_db(Session: AsyncSession, article_id: int, new_article_
     await Session.commit()
 
     return article_db
+
+async def count_article_db(Session: AsyncSession):
+    query = Select(func.count(ArticleSchema.id))
+
+    results = await Session.execute(query)
+
+    return results.scalar()

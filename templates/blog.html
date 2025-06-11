@@ -10,7 +10,7 @@
     {% for article in articles %}
     <div class="article">
         <h2>{{ article.title }}</h2>
-        <div class="meta">by {{ article.author }}</div>
+        <div class="meta">by {{ article.user.username }}</div>
         <div class="content">{{ article.content }}</div>
         <div class="release-date">{{ article.release_date.strftime("%Y-%m-%d") }}</div>
     </div>

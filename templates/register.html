@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/register.css') }}">
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Create Your Account</h1>
+        <form id="signup-form">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <p class="login-link">Already have an account? <a href="{{ url_for('get_sign_in_page') }}">Log in</a></p>
+
+        <p id="signup-message" style="margin-top: 10px; color: green;"></p>
+    </div>
+
+    <script src="{{ url_for('static', path='/login.js') }}"></script>
+</body>
+</html>

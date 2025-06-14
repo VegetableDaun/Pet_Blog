@@ -16,7 +16,31 @@ router = APIRouter(
 )
 
 
-@router.get("/blog/{user_id}/page/{page_id}", response_class=HTMLResponse)
+@router.get("/register", response_class=HTMLResponse)
+async def get_sign_up_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="register.html",
+    )
+
+
+@router.get("/login", response_class=HTMLResponse)
+async def get_sign_in_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="login.html",
+    )
+
+
+@router.get("/post", response_class=HTMLResponse)
+async def get_post_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="create_post.html",
+    )
+
+
+@router.get("/{user_id}/page/{page_id}", response_class=HTMLResponse)
 async def get_user_articles(
     request: Request,
     Session: SessionDep,
@@ -32,12 +56,12 @@ async def get_user_articles(
 
     return templates.TemplateResponse(
         request=request,
-        name="blog.html",
+        name="pages.html",
         context={"articles": articles, "total_pages": total_pages, "page": page_id},
     )
 
 
-@router.get("/blog/page/{page_id}", response_class=HTMLResponse)
+@router.get("/page/{page_id}", response_class=HTMLResponse)
 async def get_articles(
     request: Request, Session: SessionDep, page_id: int = 1, limit: int = 3
 ):
@@ -49,7 +73,6 @@ async def get_articles(
 
     return templates.TemplateResponse(
         request=request,
-        name="blog.html",
+        name="pages.html",
         context={"articles": articles, "total_pages": total_pages, "page": page_id},
     )
-d

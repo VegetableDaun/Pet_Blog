@@ -1,12 +1,24 @@
 from fastapi import FastAPI
-from starlette.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from src.articles import router as articles_router
 from src.users import router as users_router
-from src.blog import router as blogs_router
+from src.pages import router as blogs_router
 import uvicorn
 
 app = FastAPI()
+
+# origins = ["http://localhost:8000/", "https://localhost:8000/"]
+#
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

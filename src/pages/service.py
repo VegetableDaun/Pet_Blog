@@ -1,13 +1,16 @@
 from fastapi import APIRouter, Request
+from fastapi import Depends
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from authx import RequestToken
+from math import ceil
 
 from src.dependencies import SessionDep
 from src.articles.utils import (
     get_user_articles_db,
     count_user_articles_db,
 )
-from fastapi.templating import Jinja2Templates
-from math import ceil
+from auth.security import security
 
 templates = Jinja2Templates(directory="templates")
 
@@ -32,15 +35,24 @@ async def get_sign_in_page(request: Request):
     )
 
 
-@router.get("/post", response_class=HTMLResponse)
+@router.get(
+    "/post",
+    response_class=HTMLResponse,
+    dependencies=[Depends(security.access_token_required)],
+)
 async def get_post_page(request: Request):
+
     return templates.TemplateResponse(
         request=request,
         name="create_post.html",
     )
 
 
-@router.get("/{user_id}/page/{page_id}", response_class=HTMLResponse)
+@router.get(
+    "/{user_id}/page/{page_id}",
+    response_class=HTMLResponse,
+    dependencies=[Depends(security.access_token_required)],
+)
 async def get_user_articles(
     request: Request,
     Session: SessionDep,
@@ -56,14 +68,21 @@ async def get_user_articles(
 
     return templates.TemplateResponse(
         request=request,
-        name="pages.html",
+        name="blog.html",
         context={"articles": articles, "total_pages": total_pages, "page": page_id},
     )
 
 
-@router.get("/page/{page_id}", response_class=HTMLResponse)
+@router.get(
+    "/page/{page_id}",
+    response_class=HTMLResponse,
+    dependencies=[Depends(security.access_token_required)],
+)
 async def get_articles(
-    request: Request, Session: SessionDep, page_id: int = 1, limit: int = 3
+    request: Request,
+    Session: SessionDep,
+    page_id: int = 1,
+    limit: int = 3,
 ):
 
     articles_count = await count_user_articles_db(Session=Session)
@@ -73,6 +92,6 @@ async def get_articles(
 
     return templates.TemplateResponse(
         request=request,
-        name="pages.html",
+        name="blog.html",
         context={"articles": articles, "total_pages": total_pages, "page": page_id},
     )

@@ -1,3 +1,5 @@
+import uvicorn
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -5,9 +7,10 @@ from fastapi.staticfiles import StaticFiles
 from src.articles import router as articles_router
 from src.users import router as users_router
 from src.pages import router as blogs_router
-import uvicorn
+from auth.security import security
 
 app = FastAPI()
+security.handle_errors(app)
 
 # origins = ["http://localhost:8000/", "https://localhost:8000/"]
 #

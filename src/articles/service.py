@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from src.auth.security import security
+from src.auth.utils import check_token
+from authx import RequestToken, TokenPayload
 
 from src.articles.models import ArticleCreate, ArticlePublic, ArticleUpdate
 from src.articles.schemas import ArticleSchema
@@ -14,13 +17,21 @@ router = APIRouter(
 )
 
 
-@router.post("/article", response_model=ArticlePublic)
+@router.post(
+    "/article",
+    response_model=ArticlePublic,
+)
 async def add_article(
-    Session: SessionDep, article_data: ArticleCreate, user_id: int
+    Session: SessionDep,
+    article_data: ArticleCreate,
+    token: TokenPayload = Depends(security.access_token_required),
 ) -> ArticleSchema:
+    # check_token(token=token, auth=security)
+
     try:
+
         article = await add_article_db(
-            Session=Session, article_data=article_data, user_id=user_id
+            Session=Session, article_data=article_data, user_id=int(token.sub)
         )
 
         return article
@@ -28,7 +39,7 @@ async def add_article(
         raise e
 
 
-@router.delete("/article")
+@router.delete("/article", dependencies=[Depends(security.access_token_required)])
 async def delete_article(Session: SessionDep, article_id: int):
 
     try:
@@ -39,7 +50,11 @@ async def delete_article(Session: SessionDep, article_id: int):
         raise e
 
 
-@router.patch("/article", response_model=ArticlePublic)
+@router.patch(
+    "/article",
+    response_model=ArticlePublic,
+    dependencies=[Depends(security.access_token_required)],
+)
 async def update_article(
     Session: SessionDep, article_id: int, new_article_data: ArticleUpdate
 ):

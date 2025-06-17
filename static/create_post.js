@@ -2,6 +2,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("post-form");
     const message = document.getElementById("post-message");
 
+    // Get cookie value by name
+    function getCookie(cname) {
+        const name = cname + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return "";
+    }
+
+    // Get CSRF token from cookie
+    function getCSRFCookie() {
+        return getCookie("csrf_access_token");
+    }
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -11,11 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
             secret_info: document.getElementById("secret_info").value
         };
 
+        const csrfToken = getCSRFCookie();
+
         try {
-            const response = await fetch("/create-post", {
+            const response = await fetch("/article", {
                 method: "POST",
+                credentials: "include", // Required to send access_token cookie
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken // Required by backend
                 },
                 body: JSON.stringify(data)
             });

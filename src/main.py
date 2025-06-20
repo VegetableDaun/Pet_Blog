@@ -12,15 +12,15 @@ from auth.security import security
 app = FastAPI()
 security.handle_errors(app)
 
-# origins = ["http://localhost:8000/", "https://localhost:8000/"]
-#
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+origins = ["http://localhost:8000/", "https://localhost:8000/"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")

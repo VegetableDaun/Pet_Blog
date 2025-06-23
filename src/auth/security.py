@@ -1,4 +1,4 @@
-from settings import AuthEnvConfig
+from src.settings import AuthEnvConfig
 from authx import AuthX, AuthXConfig
 
 settings = AuthEnvConfig()

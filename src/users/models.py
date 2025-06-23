@@ -3,19 +3,19 @@ from typing import Self
 
 
 class UserCreate(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
+    username: str = Field(max_length=16)
+    email: EmailStr = Field(max_length=32)
+    password: str = Field(max_length=32)
 
 
 class UserPublic(BaseModel):
-    username: str
+    username: str = Field(max_length=16)
 
 
 class UserLogin(BaseModel):
-    username: str | None = Field(default=None)
-    email: EmailStr | None = Field(default=None)
-    password: str
+    username: str | None = Field(default=None, max_length=16)
+    email: EmailStr | None = Field(default=None, max_length=32)
+    password: str = Field(max_length=32)
 
     @model_validator(mode="after")
     def check_name_filled(self) -> Self:
@@ -26,6 +26,6 @@ class UserLogin(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    username: str | None = Field(default=None)
-    email: EmailStr | None = Field(default=None)
-    password: str | None = Field(default=None)
+    username: str | None = Field(default=None, max_length=16)
+    email: EmailStr | None = Field(default=None, max_length=32)
+    password: str | None = Field(default=None, max_length=32)

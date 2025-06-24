@@ -11,8 +11,7 @@ from src.articles.utils import (
     count_user_articles_db,
 )
 from auth.security import security
-
-templates = Jinja2Templates(directory="templates")
+from src.pages.templates import templates
 
 router = APIRouter(
     tags=["Blog 🌐"],

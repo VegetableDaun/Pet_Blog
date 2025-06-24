@@ -19,7 +19,7 @@ class UserSchema(BaseModel):
         CheckConstraint("email ~ '^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+$'"),
         unique=True,
     )
-    password: Mapped[str] = mapped_column(String(32))
+    password: Mapped[str] = mapped_column(String(72))
 
     articles: Mapped[List["ArticleSchema"] | None] = Relationship(
         back_populates="user", lazy="selectin"

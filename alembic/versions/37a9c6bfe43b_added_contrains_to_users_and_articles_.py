@@ -83,6 +83,7 @@ def downgrade() -> None:
         constraint_name="check_email_users",
         table_name="users",
         schema="dev",
+        type_="check",
     )
 
     # ### end Alembic commands ###

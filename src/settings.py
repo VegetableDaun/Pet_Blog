@@ -6,7 +6,7 @@ import pathlib
 DOTENV = pathlib.Path(os.path.dirname(__file__)).parent / ".env"
 
 
-class Settings(BaseSettings):
+class DbEnvConfig(BaseSettings):
     driver_name: str
     user_name: str
     password: str
@@ -35,5 +35,14 @@ class AuthEnvConfig(BaseSettings):
     ]
     jwt_secret_key: str
     jwt_token_location: Sequence[Literal["headers", "cookies", "json", "query"]]
+
+    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
+
+
+class CorsEnvConfig(BaseSettings):
+    origins: List[str]
+    allow_credentials: bool
+    allow_methods: List[str]
+    allow_headers: List[str]
 
     model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")

@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 from src.models import BaseModel
-from src.settings import Settings
+from src.settings import DbEnvConfig
 from sqlalchemy import URL
 
 # this is the Alembic Config object, which provides
@@ -25,7 +25,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = BaseModel.metadata
 
-settings = Settings()
+settings = DbEnvConfig()
 sqlalchemy_url = URL.create(
     drivername=settings.driver_name,
     username=settings.user_name,

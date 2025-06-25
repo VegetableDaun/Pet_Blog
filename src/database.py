@@ -2,9 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy import URL, MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from src.settings import Settings
+from src.settings import DbEnvConfig
 
-settings = Settings()
+settings = DbEnvConfig()
 
 url = URL.create(
     drivername=settings.driver_name,

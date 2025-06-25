@@ -1,7 +1,6 @@
 import uvicorn
 
 from fastapi import FastAPI, status
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from src.articles import router as articles_router
@@ -13,6 +12,7 @@ from src.pages.errors.exception_handlers import (
     forbidden_handler,
 )
 from src.auth.security import security
+from src.middleware import register_middleware
 
 # Creation of FastApi App
 app = FastAPI()
@@ -25,16 +25,8 @@ app.add_exception_handler(status.HTTP_404_NOT_FOUND, not_found_handler)
 # Exception Handlers for Errors which happened after problems with access and refresh tokens
 security.handle_errors(app)
 
-# CORS Middleware
-origins = ["http://localhost:8000/", "https://localhost:8000/"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Register Middleware
+register_middleware(app=app)
 
 # Static Files
 app.mount("/static", StaticFiles(directory="static"), name="static")

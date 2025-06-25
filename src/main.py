@@ -3,6 +3,8 @@ import uvicorn
 from fastapi import FastAPI, status
 from fastapi.staticfiles import StaticFiles
 
+from authx.exceptions import MissingTokenError, TokenRequiredError
+
 from src.articles import router as articles_router
 from src.users import router as users_router
 from src.pages import router as blogs_router
@@ -24,6 +26,8 @@ app.add_exception_handler(status.HTTP_404_NOT_FOUND, not_found_handler)
 
 # Exception Handlers for Errors which happened after problems with access and refresh tokens
 security.handle_errors(app)
+app.add_exception_handler(MissingTokenError, unauthorized_handler)
+app.add_exception_handler(TokenRequiredError, unauthorized_handler)
 
 # Register Middleware
 register_middleware(app=app)

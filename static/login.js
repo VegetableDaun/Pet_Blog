@@ -16,8 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)
-            });
+                credentials: "include" // Important to allow cookies
+            , body: JSON.stringify(data) });
+
+            // If redirect is handled by the browser, no need to parse JSON
+            if (response.redirected) {
+                window.location.href = response.url; // Follow redirect manually
+                return;
+            }
 
             const result = await response.json();
 
@@ -28,8 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 message.style.color = "green";
                 message.textContent = "Logged in successfully!";
                 form.reset();
-                // Optional: Redirect to homepage
-                // window.location.href = "/";
             }
         } catch (err) {
             message.style.color = "red";

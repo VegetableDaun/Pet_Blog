@@ -17,15 +17,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
+                credentials: "include", // Allow cookies to be set
                 body: JSON.stringify(data)
             });
 
+            if (response.redirected) {
+                window.location.href = response.url; // Follow server-side redirect
+                return;
+            }
+
+            const result = await response.json();
+
             if (!response.ok) {
-                const error = await response.json();
                 message.style.color = "red";
-                message.textContent = error.detail || "Registration failed.";
+                message.textContent = result.detail || "Registration failed.";
             } else {
-                const result = await response.json();
                 message.style.color = "green";
                 message.textContent = "Signed up successfully!";
                 form.reset();

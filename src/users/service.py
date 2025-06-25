@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Response, Depends
+from fastapi import APIRouter, Response, Depends, HTTPException
 
 from src.dependencies import SessionDep
-from src.users.utils import add_user_db, check_user_db
+from src.users.utils import add_user_db, authenticate_user
 from src.users.models import UserCreate, UserLogin, UserPublic
 from src.users.schemas import UserSchema
 from src.auth.security import security
@@ -41,7 +41,7 @@ async def sign_in(
     user_data: UserLogin, Session: SessionDep, response: Response
 ) -> UserSchema:
     try:
-        user = await check_user_db(user_data=user_data, Session=Session)
+        user = await authenticate_user(user_data=user_data, Session=Session)
 
         token = security.create_access_token(uid=str(user.id))
         security.set_access_cookies(

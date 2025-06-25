@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import Select, func
+from sqlalchemy import Select, func, desc
 from fastapi import Depends, HTTPException
 
 from src.articles.schemas import ArticleSchema
@@ -9,12 +9,26 @@ from src.users.schemas import UserSchema
 
 
 async def get_user_articles_db(
-    Session: AsyncSession, user_id: int | None = None, limit=5, page_id=1
+    Session: AsyncSession, username: str | None = None, limit=5, page_id=1
 ):
-    if user_id is None:
-        query = Select(ArticleSchema).offset((page_id - 1) * limit).limit(limit)
+    if username is None:
+        query = (
+            Select(ArticleSchema)
+            .offset((page_id - 1) * limit)
+            .limit(limit)
+            .order_by(desc(ArticleSchema.release_date))
+        )
     else:
-        query = Select(func.count(ArticleSchema.id)).where(UserSchema.id == user_id)
+        query = (
+            Select(ArticleSchema)
+            .offset((page_id - 1) * limit)
+            .limit(limit)
+            .where(
+                ArticleSchema.user_id
+                == Select(UserSchema.id).where(UserSchema.username == username)
+            )
+            .order_by(desc(ArticleSchema.release_date))
+        )
 
     results = await Session.execute(query)
     articles = results.scalars().all()
@@ -75,11 +89,14 @@ async def update_article_db(
     return article_db
 
 
-async def count_user_articles_db(Session: AsyncSession, user_id: int | None = None):
-    if user_id is None:
+async def count_user_articles_db(Session: AsyncSession, username: str | None = None):
+    if username is None:
         query = Select(func.count(ArticleSchema.id))
     else:
-        query = Select(func.count(ArticleSchema.id)).where(UserSchema.id == user_id)
+        query = Select(func.count(ArticleSchema.id)).where(
+            ArticleSchema.user_id
+            == Select(UserSchema.id).where(UserSchema.username == username)
+        )
 
     results = await Session.execute(query)
 

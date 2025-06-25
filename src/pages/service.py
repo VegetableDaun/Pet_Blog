@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from authx import RequestToken
@@ -48,22 +48,27 @@ async def get_post_page(request: Request):
 
 
 @router.get(
-    "/{user_id}/page/{page_id}",
+    "/{username}/page/{page_id}",
     response_class=HTMLResponse,
     dependencies=[Depends(security.access_token_required)],
 )
 async def get_user_articles(
     request: Request,
     Session: SessionDep,
-    user_id: int,
+    username: str,
     page_id: int = 1,
-    limit: int = 3,
+    limit: int = 5,
 ):
 
-    articles_count = await count_user_articles_db(Session=Session, user_id=user_id)
+    articles_count = await count_user_articles_db(Session=Session, username=username)
     total_pages = ceil(articles_count / limit)
 
-    articles = await get_user_articles_db(Session, page_id=page_id, limit=limit)
+    if page_id > total_pages:
+        raise HTTPException(status_code=404)
+
+    articles = await get_user_articles_db(
+        Session, page_id=page_id, limit=limit, username=username
+    )
 
     return templates.TemplateResponse(
         request=request,
@@ -81,11 +86,14 @@ async def get_articles(
     request: Request,
     Session: SessionDep,
     page_id: int = 1,
-    limit: int = 3,
+    limit: int = 5,
 ):
 
     articles_count = await count_user_articles_db(Session=Session)
     total_pages = ceil(articles_count / limit)
+
+    if page_id > total_pages:
+        raise HTTPException(status_code=404)
 
     articles = await get_user_articles_db(Session, page_id=page_id, limit=limit)
 

@@ -16,7 +16,7 @@ class UserSchema(BaseModel):
     username: Mapped[str] = mapped_column(String(16), unique=True)
     email: Mapped[str] = mapped_column(
         String(32),
-        CheckConstraint("email ~ '^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+$'"),
+        CheckConstraint("email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'"),
         unique=True,
     )
     password: Mapped[str] = mapped_column(String(72))

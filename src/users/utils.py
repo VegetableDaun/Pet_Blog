@@ -36,6 +36,6 @@ async def authenticate_user(Session: AsyncSession, user_data: UserLogin) -> User
     elif not verify_password(
         plain_password=user_data.password, hashed_password=user.password
     ):
-        raise HTTPException(status_code=401, detail="User not authorized")
+        raise HTTPException(status_code=401, detail="Incorrect Password")
     else:
         return user

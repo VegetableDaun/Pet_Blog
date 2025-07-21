@@ -3,7 +3,7 @@ from typing import List, Literal, Sequence
 import os
 import pathlib
 
-DOTENV = pathlib.Path(os.path.dirname(__file__)).parent / ".env"
+DOTENV_FILES_PATH = pathlib.Path(os.path.dirname(__file__)).parent
 
 
 class DbEnvConfig(BaseSettings):
@@ -14,7 +14,10 @@ class DbEnvConfig(BaseSettings):
     port: int
     database: str
 
-    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(DOTENV_FILES_PATH / ".env", DOTENV_FILES_PATH / ".dev.env"),
+        extra="ignore",
+    )
 
 
 class AuthEnvConfig(BaseSettings):
@@ -36,7 +39,10 @@ class AuthEnvConfig(BaseSettings):
     jwt_secret_key: str
     jwt_token_location: Sequence[Literal["headers", "cookies", "json", "query"]]
 
-    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(DOTENV_FILES_PATH / ".env", DOTENV_FILES_PATH / ".dev.env"),
+        extra="ignore",
+    )
 
 
 class CorsEnvConfig(BaseSettings):
@@ -45,4 +51,7 @@ class CorsEnvConfig(BaseSettings):
     allow_methods: List[str]
     allow_headers: List[str]
 
-    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(DOTENV_FILES_PATH / ".env", DOTENV_FILES_PATH / ".dev.env"),
+        extra="ignore",
+    )

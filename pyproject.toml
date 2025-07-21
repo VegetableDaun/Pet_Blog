@@ -16,10 +16,22 @@ dependencies = [
     "sqlalchemy>=2.0.40",
 ]
 
+python_executable = ".venv/Scripts/python.exe"
+explicit_package_bases = true
+
 [tool.mypy]
 strict = true
 warn_return_any = true
 warn_unused_configs = true
 
-python_executable = ".venv/Scripts/python.exe"
-explicit_package_bases = true
+[tool.pytest.ini_options]
+pythonpath = ["."]
+asyncio_mode = "auto" # or "strict"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+]

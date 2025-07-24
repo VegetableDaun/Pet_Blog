@@ -1,14 +1,16 @@
 import os
+import pytest
 import pathlib
+from typing import AsyncGenerator
+
+from threading import Thread
+from httpx import AsyncClient, ASGITransport
 
 from src.database import session_maker, engine
+from src.main import app
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, AsyncEngine
-from typing import AsyncGenerator
 from alembic.config import Config as AlembicConfig
-from threading import Thread
 from alembic.command import upgrade, downgrade
-
-import pytest
 
 
 @pytest.fixture(scope="session")
@@ -59,3 +61,11 @@ async def prepare_db(alembic_config: AlembicConfig):
     tread = Thread(target=downgrade, args=[alembic_config, "base"])
     tread.start()
     tread.join()
+
+
+@pytest.fixture(scope="module")
+async def async_client():
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as ac:
+        yield ac

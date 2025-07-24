@@ -1,8 +1,9 @@
 import uvicorn
+import pathlib
+import os
 
 from fastapi import FastAPI, status
 from fastapi.staticfiles import StaticFiles
-
 from authx.exceptions import MissingTokenError, TokenRequiredError
 
 from src.articles import router as articles_router
@@ -33,7 +34,9 @@ app.add_exception_handler(TokenRequiredError, unauthorized_handler)
 register_middleware(app=app)
 
 # Static Files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# static_path = pathlib.Path(__file__).parent
+static_path = pathlib.Path(os.path.dirname(__file__)).parent / "static"
+app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 # Routers
 app.include_router(articles_router)

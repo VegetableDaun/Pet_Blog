@@ -25,7 +25,9 @@ async def get_user_articles_db(
             .limit(limit)
             .where(
                 ArticleSchema.user_id
-                == Select(UserSchema.id).where(UserSchema.username == username)
+                == Select(UserSchema.id)
+                .where(UserSchema.username == username)
+                .scalar_subquery()
             )
             .order_by(desc(ArticleSchema.release_date))
         )
@@ -95,7 +97,9 @@ async def count_user_articles_db(Session: AsyncSession, username: str | None = N
     else:
         query = Select(func.count(ArticleSchema.id)).where(
             ArticleSchema.user_id
-            == Select(UserSchema.id).where(UserSchema.username == username)
+            == Select(UserSchema.id)
+            .where(UserSchema.username == username)
+            .scalar_subquery()
         )
 
     results = await Session.execute(query)

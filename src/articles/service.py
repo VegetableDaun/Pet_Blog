@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from src.auth.security import security
-from src.auth.utils import check_token
-from authx import RequestToken, TokenPayload
+from authx import TokenPayload
 
 from src.articles.models import ArticleCreate, ArticlePublic, ArticleUpdate
 from src.articles.schemas import ArticleSchema

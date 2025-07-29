@@ -60,24 +60,46 @@ class TestUserSchema:
             username="x" * 17, email="eve@example.com", password="evePwd2024"
         )
 
-        with pytest.raises(DBAPIError) as ex:
+        with pytest.raises(DBAPIError) as ex_pytest:
             test_session.add(user)
-            await test_session.commit()
+
+            try:
+                await test_session.commit()
+            except DBAPIError as ex_db:
+                await test_session.rollback()
+
+                raise
 
     async def test_too_long_email(self, test_session: AsyncSession):
         user = UserSchema(
             username="eve", email="no-correct-email", password="evePwd2024"
         )
 
-        with pytest.raises(IntegrityError) as ex:
+        # with pytest.raises(IntegrityError) as ex:
+        #     test_session.add(user)
+        #     await test_session.commit()
+
+        with pytest.raises(IntegrityError) as ex_pytest:
             test_session.add(user)
-            await test_session.commit()
+
+            try:
+                await test_session.commit()
+            except DBAPIError as ex_db:
+                await test_session.rollback()
+
+                raise
 
         # assert isinstance(ex.type, CheckViolationError)
 
     async def test_too_long_password(self, test_session: AsyncSession):
         user = UserSchema(username="eve8", email="eve@example.com", password="x" * 73)
 
-        with pytest.raises(DBAPIError) as ex:
+        with pytest.raises(DBAPIError) as ex_pytest:
             test_session.add(user)
-            await test_session.commit()
+
+            try:
+                await test_session.commit()
+            except DBAPIError as ex_db:
+                await test_session.rollback()
+
+                raise

@@ -23,7 +23,7 @@ async def test_session_maker() -> async_sessionmaker:
     return session_maker
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="class")
 async def test_session(
     test_session_maker: async_sessionmaker,
 ) -> AsyncGenerator[AsyncSession]:

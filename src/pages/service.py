@@ -40,7 +40,6 @@ async def get_sign_in_page(request: Request):
     dependencies=[Depends(security.access_token_required)],
 )
 async def get_post_page(request: Request):
-
     return templates.TemplateResponse(
         request=request,
         name="create_post.html",
@@ -59,11 +58,10 @@ async def get_user_articles(
     page_id: int = 1,
     limit: int = 5,
 ):
-
     articles_count = await count_user_articles_db(Session=Session, username=username)
     total_pages = ceil(articles_count / limit)
 
-    if page_id > total_pages:
+    if page_id > total_pages and total_pages != 0:
         raise HTTPException(status_code=404)
 
     articles = await get_user_articles_db(
@@ -88,7 +86,6 @@ async def get_articles(
     page_id: int = 1,
     limit: int = 5,
 ):
-
     articles_count = await count_user_articles_db(Session=Session)
     total_pages = ceil(articles_count / limit)
 

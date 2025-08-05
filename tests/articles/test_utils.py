@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy.sql.functions import user
 
 from src.articles.schemas import ArticleSchema
-from conftest import test_session
+from tests.conftest import test_session
 from src.articles.models import ArticleCreate, ArticleUpdate
 from src.articles.utils import (
     get_user_articles_db,

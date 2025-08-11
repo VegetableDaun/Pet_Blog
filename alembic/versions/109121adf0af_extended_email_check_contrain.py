@@ -20,22 +20,24 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.drop_constraint("check_email_users", "users", type_="check", schema="dev")
+    op.drop_constraint(
+        constraint_name="check_email_users", table_name="users", type_="check"
+    )
 
     op.create_check_constraint(
         condition="email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'",
         constraint_name="check_email_users",
         table_name="users",
-        schema="dev",
     )
 
 
 def downgrade() -> None:
-    op.drop_constraint("check_email_users", "users", type_="check", schema="dev")
+    op.drop_constraint(
+        constraint_name="check_email_users", table_name="users", type_="check"
+    )
 
     op.create_check_constraint(
         condition="email ~ '^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+$'",
         constraint_name="check_email_users",
         table_name="users",
-        schema="dev",
     )

@@ -26,7 +26,6 @@ def upgrade() -> None:
         existing_type=sa.String(),
         type_=sa.String(length=80),
         existing_nullable=False,
-        schema="dev",
     )
 
     op.alter_column(
@@ -35,7 +34,6 @@ def upgrade() -> None:
         existing_type=sa.String(),
         type_=sa.String(length=280),
         existing_nullable=False,
-        schema="dev",
     )
 
     op.alter_column(
@@ -44,7 +42,6 @@ def upgrade() -> None:
         existing_type=sa.String(),
         type_=sa.String(length=80),
         existing_nullable=False,
-        schema="dev",
     )
 
 
@@ -56,7 +53,6 @@ def downgrade() -> None:
         existing_type=sa.String(length=80),
         type_=sa.String(),
         existing_nullable=False,
-        schema="dev",
     )
 
     op.alter_column(
@@ -65,7 +61,6 @@ def downgrade() -> None:
         existing_type=sa.String(length=280),
         type_=sa.String(),
         existing_nullable=False,
-        schema="dev",
     )
 
     op.alter_column(
@@ -74,5 +69,4 @@ def downgrade() -> None:
         existing_type=sa.String(length=80),
         type_=sa.String(),
         existing_nullable=False,
-        schema="dev",
     )
